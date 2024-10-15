@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 HELP.md
 .gradle
 build/
@@ -23,6 +23,9 @@ bin/
 *.iws
 *.iml
 *.ipr
+gradle/
+gradlew/
+gradlew.bat
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -34,6 +37,3 @@ out/
 /nbdist/
 /.nb-gradle/
 
-
-
->>>>>>> 18861775d9fb7c52c49b88587f5e6fa5821bd8a5
