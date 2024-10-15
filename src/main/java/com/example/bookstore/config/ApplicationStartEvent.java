@@ -26,7 +26,6 @@ public class ApplicationStartEvent {
     @EventListener(ApplicationReadyEvent.class)
     public void onReadyEvent() throws JobExecutionException {
         JobParameters jobParameters = new JobParametersBuilder()
-                //.addString("ignoreCountry", "India")
                 .addLong("startTime",System.currentTimeMillis())
                 .toJobParameters();
 

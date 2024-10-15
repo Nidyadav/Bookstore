@@ -26,7 +26,6 @@ public class SpringBatchConfig {
     @Bean
     public FlatFileItemReader<Book> reader() {
 
-        //try {
         return new FlatFileItemReaderBuilder<Book>()
                 .linesToSkip(1)
                 .name("csvItemReader")
@@ -65,11 +64,6 @@ public class SpringBatchConfig {
                         .price(fieldSet.readString("price"))
                         .build()
                 ).build();
-//        } catch (Exception e) {
-//            //throw new RuntimeException(e);
-//            logger.error(e.getMessage());
-//        }
-
 
     }
 
@@ -80,21 +74,11 @@ public class SpringBatchConfig {
         return writer;
     }
 
+
     @Bean
-    public Job csvImporterJob(Step customerStep, JobRepository jobRepository,
-                              ImportJobListener importJobListener) {
+    public Job csvImporterJob(Step customerStep, JobRepository jobRepository) {
         return new JobBuilder("csvImporterJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
-                .validator(new JobParametersValidator() {
-                    @Override
-                    public void validate(JobParameters parameters) throws JobParametersInvalidException {
-                        String ignoreCountry = parameters.getString("ignoreCountry");
-                        if ("Costa Rica".equals(ignoreCountry)) {
-                            throw new JobParametersInvalidException("Country ignored");
-                        }
-                    }
-                })
-                .listener(importJobListener)
                 .flow(customerStep)
                 .end()
                 .build();
@@ -109,7 +93,7 @@ public class SpringBatchConfig {
                 .<Book, Book>chunk(50, tx)
                 .reader(csvReader)
                 .writer(csvWriter)
-                //  .processor(processor)
+                //.processor(processor)
                 .allowStartIfComplete(true)
                 .build();
     }
