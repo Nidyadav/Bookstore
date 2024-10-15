@@ -19,11 +19,11 @@ import java.time.LocalDate;
 public class Book {
     @Id
     private String bookId;
-    private int quantity;
+    private String quantity;
     private String title;
     private String series;
     private String author;
-    private double rating;
+    private String rating;
     private String description;
     private String language;
     private String isbn;
@@ -31,19 +31,19 @@ public class Book {
     private String[] characters;
     private String bookForm;
     private String edition;
-    private int pages;
+    private String pages;
     private String publisher;
     private LocalDate publishingDate;
     private LocalDate firstPublishDate;
     private String[] awards;
-    private long numRating;
+    private String numRating;
     private String[] ratingsByStars;
-    private float likedPercent;
+    private String likedPercent;
     private String[] setting;
     private String coverImg;
-    private long bbeScore;
-    private long bbeVotes;
-    private double price;
+    private String bbeScore;
+    private String bbeVotes;
+    private String price;
 
 
 }

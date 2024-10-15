@@ -20,13 +20,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 
-
-
 @Configuration
 @EnableBatchProcessing
 public class SpringBatchConfig {
     @Bean
     public FlatFileItemReader<Book> reader() {
+
+        //try {
         return new FlatFileItemReaderBuilder<Book>()
                 .linesToSkip(1)
                 .name("csvItemReader")
@@ -35,14 +35,14 @@ public class SpringBatchConfig {
                 .delimiter(",")
                 .names("bookId", "quantity", "title", "series", "author", "rating", "description", "language", "isbn",
                         "genres", "characters", "bookForm", "edition", "pages", "publisher", "publishingDate", "firstPublishDate",
-                        "awards", "numRating", "ratingsByStars", "LikedPercent", "setting", "coverImg", "bbeScores", "bbeVotes", "price")
+                        "awards", "numRating", "ratingsByStars", "likedPercent", "setting", "coverImg", "bbeScore", "bbeVotes", "price")
                 .fieldSetMapper(fieldSet -> Book.builder()
                         .bookId(fieldSet.readString("bookId"))
-                        .quantity(fieldSet.readInt("quantity"))
+                        .quantity(fieldSet.readString("quantity"))
                         .title(fieldSet.readString("title"))
                         .series(fieldSet.readString("series"))
                         .author(fieldSet.readString("author"))
-                        .rating(fieldSet.readDouble("rating"))
+                        .rating(fieldSet.readString("rating"))
                         .description(fieldSet.readString("description"))
                         .language(fieldSet.readString("language"))
                         .isbn(fieldSet.readString("isbn"))
@@ -50,22 +50,25 @@ public class SpringBatchConfig {
                         .characters(fieldSet.readString("characters").split("\\|"))
                         .bookForm(fieldSet.readString("bookForm"))
                         .edition(fieldSet.readString("edition"))
-                        .pages(fieldSet.readInt("pages"))  // Assuming this is an integer
+                        .pages(fieldSet.readString("pages"))  // Assuming this is an integer
                         .publisher(fieldSet.readString("publisher"))
                         .publishingDate(DateUtils.parseDate(fieldSet.readString("publishingDate")))
                         .firstPublishDate(DateUtils.parseDate(fieldSet.readString("firstPublishDate")))  // Same for dates
                         .awards(fieldSet.readString("awards").split("\\|"))
-                        .numRating(fieldSet.readInt("numRating"))
+                        .numRating(fieldSet.readString("numRating"))
                         .ratingsByStars(fieldSet.readString("ratingsByStars").split("\\|"))  // Assuming it's stored as a string
-                        .likedPercent(fieldSet.readFloat("likedPercent"))
+                        .likedPercent(fieldSet.readString("likedPercent"))
                         .setting(fieldSet.readString("setting").split("\\|"))
                         .coverImg(fieldSet.readString("coverImg"))
-                        .bbeScore(fieldSet.readLong("bbeScore"))
-                        .bbeVotes(fieldSet.readLong("bbeVotes"))
-                        .price(fieldSet.readDouble("price"))
-
+                        .bbeScore(fieldSet.readString("bbeScore"))
+                        .bbeVotes(fieldSet.readString("bbeVotes"))
+                        .price(fieldSet.readString("price"))
                         .build()
                 ).build();
+//        } catch (Exception e) {
+//            //throw new RuntimeException(e);
+//            logger.error(e.getMessage());
+//        }
 
 
     }
@@ -106,7 +109,7 @@ public class SpringBatchConfig {
                 .<Book, Book>chunk(50, tx)
                 .reader(csvReader)
                 .writer(csvWriter)
-              //  .processor(processor)
+                //  .processor(processor)
                 .allowStartIfComplete(true)
                 .build();
     }
