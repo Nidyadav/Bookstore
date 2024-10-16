@@ -90,7 +90,7 @@ public class SpringBatchConfig {
             JobRepository jobRepository, PlatformTransactionManager tx) {
 
         return new StepBuilder("csvImporterStep", jobRepository)
-                .<Book, Book>chunk(50, tx)
+                .<Book, Book>chunk(25, tx)
                 .reader(csvReader)
                 .writer(csvWriter)
                 //.processor(processor)
