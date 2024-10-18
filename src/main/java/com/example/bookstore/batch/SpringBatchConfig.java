@@ -2,6 +2,7 @@ package com.example.bookstore.batch;
 
 import com.example.bookstore.model.Book;
 import com.example.bookstore.utils.DateUtils;
+import com.example.bookstore.utils.Utils;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -29,7 +30,7 @@ public class SpringBatchConfig {
         return new FlatFileItemReaderBuilder<Book>()
                 .linesToSkip(1)
                 .name("csvItemReader")
-                .resource(new ClassPathResource("books_1.Best_Books_Ever.csv"))
+                .resource(new ClassPathResource("books.csv"))
                 .delimited()
                 .delimiter(",")
                 .names("bookId", "quantity", "title", "series", "author", "rating", "description", "language", "isbn",
@@ -45,19 +46,18 @@ public class SpringBatchConfig {
                         .description(fieldSet.readString("description"))
                         .language(fieldSet.readString("language"))
                         .isbn(fieldSet.readString("isbn"))
-                        .genres(fieldSet.readString("genres").split("\\|"))
-                        .characters(fieldSet.readString("characters").split("\\|"))
+                        .genres(Utils.stringToList(fieldSet.readString("genres")))
+                        .characters(Utils.stringToList(fieldSet.readString("characters")))
                         .bookForm(fieldSet.readString("bookForm"))
                         .edition(fieldSet.readString("edition"))
                         .pages(fieldSet.readString("pages"))  // Assuming this is an integer
                         .publisher(fieldSet.readString("publisher"))
                         .publishingDate(DateUtils.parseDate(fieldSet.readString("publishingDate")))
                         .firstPublishDate(DateUtils.parseDate(fieldSet.readString("firstPublishDate")))  // Same for dates
-                        .awards(fieldSet.readString("awards").split("\\|"))
+                        .awards(Utils.stringToList(fieldSet.readString("awards")))
                         .numRating(fieldSet.readString("numRating"))
-                        .ratingsByStars(fieldSet.readString("ratingsByStars").split("\\|"))  // Assuming it's stored as a string
+                        .ratingsByStars(Utils.stringToList(fieldSet.readString("ratingsByStars")))
                         .likedPercent(fieldSet.readString("likedPercent"))
-                        .setting(fieldSet.readString("setting").split("\\|"))
                         .coverImg(fieldSet.readString("coverImg"))
                         .bbeScore(fieldSet.readString("bbeScore"))
                         .bbeVotes(fieldSet.readString("bbeVotes"))
