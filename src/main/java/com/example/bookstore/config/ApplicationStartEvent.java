@@ -25,15 +25,18 @@ public class ApplicationStartEvent {
 
     @EventListener(ApplicationReadyEvent.class)
     public void onReadyEvent() throws JobExecutionException {
-        try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addLong("startTime", System.currentTimeMillis())
-                    .toJobParameters();
+          ScheduledBatchJob scheduledBatchJob=new ScheduledBatchJob(jobLauncher,csvImporterJob);
+          scheduledBatchJob.performScheduledJob();
 
-            jobLauncher.run(csvImporterJob, jobParameters);
-        } catch(RuntimeException e) {
-            log.error(e.getMessage());
-        }
+//        try {
+//            JobParameters jobParameters = new JobParametersBuilder()
+//                    .addLong("startTime", System.currentTimeMillis())
+//                    .toJobParameters();
+//
+//            jobLauncher.run(csvImporterJob, jobParameters);
+//        } catch(RuntimeException e) {
+//            log.error(e.getMessage());
+//        }
 
     }
 }
